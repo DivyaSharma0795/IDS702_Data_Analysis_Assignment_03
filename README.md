@@ -1,0 +1,2 @@
+# IDS702_Data_Analysis_Assignment_03
+Generalized Linear Model
