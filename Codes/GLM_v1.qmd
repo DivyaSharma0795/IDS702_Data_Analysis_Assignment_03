@@ -1,1 +1,37 @@
-C
+---
+title: "GLM"
+format: pdf
+editor: visual
+---
+
+# Overview
+
+Provide a few sentences describing the purpose of GLMs and the general
+structure of a GLM. As part of this, describe the purpose of a link
+function. Provide a few sentences to describe the purpose of your
+particular GLM. Include 2 examples of research questions that could be
+answered with your GLM.
+
+# Probability Distribution
+
+Briefly describe the probability distribution that is assumed for the
+outcome. What is the support? What are the parameters and what values
+can they take?
+
+# Model
+
+Write out the general form of your GLM. What is the link function and
+why is it appropriate for that type of outcome? What are the model
+assumptions?
+
+# Data Example
+
+-   Introduce the dataset. Provide a few summary statistics and/or plots. Include the fact that this is a simulated dataset.
+
+-   Fit the model. Include all relevant code, including `library()` for packages if needed.
+
+-   Explain how to interpret coefficient estimates for the predictors.
+
+-   Show and describe a plot that illustrates the results of the model.
+
+-   Describe how to assess the model and include the code to do so. Include how to assess any assumptions that are unique to that model (e.g., proportional odds, overdispersion). *Note: For the ordinal model, assess the assumption using the method shown in the class exercise, not the hypothesis test shown in the videos.*
