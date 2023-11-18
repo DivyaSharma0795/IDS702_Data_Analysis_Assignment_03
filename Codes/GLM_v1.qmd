@@ -48,7 +48,11 @@ In summary, a multinomial GLM can model a categorical response to explain the fa
 
 # Probability Distribution
 
-In a multinomial logistic regression, the outcome variable is assumed to follow a multinomial distribution. This is a generalization of the binomial distribution for categorical variables with more than two categories.
+In a multinomial logistic regression, the outcome variable is assumed to follow a multinomial distribution. This is a generalization of the binomial distribution for categorical variables with more than two categories. The Probability Mass Function of a multinomial distribution is given by the equation:
+
+$$ Pr(X_1 = x_1 and ... and X_k = x_k) = \frac{n!}{x_1!...x_k!}p_1^{x_1}...p_k^{x_k} $$
+
+where n is the total number of observations or trails, $x_i$ is the counts for each category and $p_i$ are the probabilities for each category.
 
 The support of a multinomial distribution is a set of all possible outcomes of the categorical variable. For example, if the outcome variable is "color" with possible values "red", "green", and "blue", the support is {"red", "green", "blue"}.
 
@@ -60,8 +64,7 @@ In the context of a multinomial logistic regression, these probabilities are mod
 
 # Model Overview
 
-The general form of a Generalized Linear Model (GLM) is:
-$$
+The general form of a Generalized Linear Model (GLM) is: $$
 g(E(Y)) = β0 + β1*X1 + β2*X2
 $$
 
@@ -75,11 +78,11 @@ $$
 
 The assumptions of the multinomial logistic regression model are:
 
-* The response variable is a categorical variable with unordered categories.
-* The observations are independent.
-* There is no perfect multicollinearity among the predictor variables.
-* The model is correctly specified (i.e., the form of the model is correct, and it includes all relevant predictors).
-* The probabilities of the outcomes are a multinomial logit function of the predictor variables.
+-   The response variable is a categorical variable with unordered categories.
+-   The observations are independent.
+-   There is no perfect multicollinearity among the predictor variables.
+-   The model is correctly specified (i.e., the form of the model is correct, and it includes all relevant predictors).
+-   The probabilities of the outcomes are a multinomial logit function of the predictor variables.
 
 # Data Example
 
@@ -97,20 +100,24 @@ library(purrr, quietly = T)
 #Reading Base Data
 base_data <- read.csv("https://github.com/DivyaSharma0795/IDS702_Data_Analysis_Assignment_03/raw/main/Resources/DA3_Multinomial.csv")
 ```
+
 Our simulated Dataset contains 344 observations of 3 variables. The following variables are present -
 
-*   `Y`, the multinomial dependent variable with three values - 1, 2, and 3 
-*   `X1`, a continuous predictor with values ranging from 11.12 to 27.66
-*   `X2`, a categorical predictor with values 0 and 1
+-   `Y`, the multinomial dependent variable with three values - 1, 2, and 3
+-   `X1`, a continuous predictor with values ranging from 11.12 to 27.66
+-   `X2`, a categorical predictor with values 0 and 1
 
 ### Sample Data
+
 ```{r,echo=FALSE}
 # Print the first few rows of the dataset
 kable(head(select(base_data, Y, X1, X2)))
 ```
+
 Here are some summary statistics for the dataset:
 
 \centering
+
 ```{r,echo=FALSE}
 # Select only the variables you want to include
 data_selected <- select(base_data, -X)
@@ -134,13 +141,15 @@ plot1 <- ggplot(base_data, aes(x = factor(Y), fill = factor(Y))) +
   theme_minimal()
 plot1
 ```
+
 \raggedright
 
-*   Out of 344 observations, 144 are Y category 1, 48 are Y category 2, and 152 are Y category 3, as can be observed in Plot 1. 
-*   The distribution of Y = 3 peaks at X1 > 20, the distribution of Y = 1 peaks at X1 = 20, and the distribution of Y = 2 peaks at X1 < 20, as can be observed in Plot 2. 
-*   X2 has 99 1 values and 245 0 values. The lowest distribution within these is of Y = 2, as expected by the overall distribution of the Y variable (Plot 3)
+-   Out of 344 observations, 144 are Y category 1, 48 are Y category 2, and 152 are Y category 3, as can be observed in Plot 1.
+-   The distribution of Y = 3 peaks at X1 \> 20, the distribution of Y = 1 peaks at X1 = 20, and the distribution of Y = 2 peaks at X1 \< 20, as can be observed in Plot 2.
+-   X2 has 99 1 values and 245 0 values. The lowest distribution within these is of Y = 2, as expected by the overall distribution of the Y variable (Plot 3)
 
 \centering
+
 ```{r, echo=FALSE,fig.width = 7,fig.height = 7, warning=FALSE, message=FALSE}
 plot1 <- ggplot(base_data, aes(x = X1, fill = factor(Y))) +
   geom_density(alpha = 0.5) +
@@ -159,25 +168,28 @@ plot2 <- ggplot(base_data, aes(x = factor(X2), fill = factor(Y),label=..count..)
 # Combine the plots
 grid.arrange(plot1, plot2, ncol = 1)
 ```
+
 \raggedright
 
-
 ### Model
+
 Fitting a multinomial Generalized Linear Model (GLM) involves estimating the relationship between a categorical dependent variable (Y in this case) and one or more predictor variables (X1 and X2 in this case). In a multinomial GLM, the dependent variable Y is not binary, but rather it can take on multiple categories. The model estimates the log odds of being in each category of Y compared to a reference category, as a linear function of the predictor variables.
 
-
-
 ### Model Fitting
+
 `Code:`
+
 ```{r}
 library(nnet, quietly = T)
 model <- multinom(Y ~ X1 + X2, data = base_data)
 ```
+
 Assessing the model involves checking the *goodness of fit* and validating the assumptions of the model. For a multinomial logistic regression model, there are no assumptions about the distribution of predictors (like normality or linearity), but it assumes that the outcomes are correctly specified and that the observations are independent. The goodness of fit can be observed in the model summary, as shown below :
 
 ```{r}
 summary(model)
 ```
+
 -   Coefficients: These are the estimated parameters for the model. For example, the coefficient for X1 in category 2 is -0.2237668. This means for each one unit increase in X1, the log odds of Y being in category 2 versus the reference category (category 1) decrease by 0.2237668, holding all other variables constant.
 
 -   Std. Errors: These are the standard errors of the coefficients. They measure the variability in the estimate for the coefficient. Smaller standard errors mean the estimate is more precise.
@@ -209,6 +221,7 @@ For Y=3 compared to Y=1:
 In summary, X1 has opposite effects on the relative odds of Y=2 and Y=3, while X2 significantly reduces the odds of both compared to the reference Y=1. The intercepts give the baseline log odds.
 
 \centering
+
 ```{r, echo=FALSE,fig.width = 7,fig.height = 2.5, warning=FALSE, message=FALSE}
 # Import the necessary library
 library(tidyverse, quietly = TRUE)
@@ -245,7 +258,9 @@ plot2 <- ggplot(newdata2_long, aes(x = X2, y = predicted, color = category)) +
 # Combine the plots
 grid.arrange(plot1, plot2, ncol = 2)
 ```
+
 \raggedright
+
 These two graphs illustrate the predicted probabilities of each category of the response variable (y=1, y=2, and y=3) as functions of the predictors X1 and X2, respectively.
 
 In the left graph (Plot 4), the x-axis represents the X1 variable and the y-axis represents the predicted probabilities. Each line represents a different category of the response variable (y=1, y=2, or y=3). The X2 variable is held constant at its mean value. This graph shows how the predicted probabilities change with varying values of X1, while keeping X2 constant.
@@ -253,5 +268,3 @@ In the left graph (Plot 4), the x-axis represents the X1 variable and the y-axis
 Similarly, the right graph (Plot 5) shows how the predicted probabilities change with varying values of X2, while keeping X1 constant.
 
 By examining the slopes and positions of the lines, we can understand the relationships between the predictors and the response variable categories.
-
-
